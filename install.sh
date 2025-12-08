@@ -119,7 +119,7 @@ git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
 print_info "Installing configurations..."
 
 # Backup and install .config folders
-CONFIG_DIRS=(hypr kitty rofi waybar mako wofi)
+CONFIG_DIRS=(hypr kitty rofi waybar mako wofi neofetch)
 for dir in "${CONFIG_DIRS[@]}"; do
     backup_config "$HOME/.config/$dir"
     if [ -d "$DOTFILES_DIR/config/$dir" ]; then

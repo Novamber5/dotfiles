@@ -32,3 +32,8 @@ chmod +x install.sh
 ├── scripts/         # Utility scripts
 └── install.sh       # Auto-installer
 ```
+
+## Neofetch
+Custom neofetch configuration with image display using Kitty terminal.
+
+Image location will be: `~/Pictures/Pintrest/wire.jpg`
