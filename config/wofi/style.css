@@ -1,0 +1,74 @@
+/* ~/.config/wofi/style.css */
+
+* {
+    font-family: "SF Pro Text", "JetBrainsMono Nerd Font", "Symbols Nerd Font", "Font Awesome 6 Free";
+    font-size: 13px;
+    font-weight: 700;
+}
+
+window {
+    margin: 0px;
+    border: 0.5px solid #ffffff;
+    background-color: #000000;
+    border-radius: 25px;
+}
+
+#input {
+    margin: 10px;
+    padding: 0.3rem 0.6rem;
+    border: 0.5px solid #ffffff;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 75px;
+}
+
+#input:focus {
+    border: 0.5px solid #ffffff;
+    background-color: #000000;
+}
+
+#inner-box {
+    margin: 5px;
+    padding: 5px;
+    background-color: #000000;
+}
+
+#outer-box {
+    margin: 0px;
+    padding: 0px;
+    background-color: #000000;
+  border-radius: 75px;
+
+}
+
+#scroll {
+    margin: 0px;
+    padding: 5px;
+}
+
+#text {
+    margin: 5px;
+    color: #ffffff;
+}
+
+#entry {
+    padding: 0.3rem 0.6rem;
+    margin: 0.4rem 0.25rem;
+    border-radius: 75px;
+    background-color: transparent;
+    color: #ffffff;
+}
+
+#entry:selected {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#entry:hover {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#text:selected {
+    color: #000000;
+}

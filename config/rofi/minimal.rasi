@@ -1,0 +1,109 @@
+* {
+    bg-col: #000000;
+    bg-col-light: #000000;
+    border-col: #ffffff;
+    selected-col: #ffffff;
+    text-col: #ffffff;
+    text-col-selected: #000000;
+    urgent-col: #ff0000;
+    
+    font: "SF Pro Text 13";
+    border-radius: 75px;
+}
+
+window {
+    transparency: "real";
+    background-color: @bg-col;
+    border: 2px;
+    border-color: @border-col;
+    border-radius: 10px;
+    width: 450px;
+    padding: 15px;
+    children: [mainbox];
+}
+
+mainbox {
+    background-color: transparent;
+    children: [inputbar, listview];
+    spacing: 15px;
+    padding: 5px;
+}
+
+inputbar {
+    background-color: @bg-col;
+    border: 1px;
+    border-color: @border-col;
+    border-radius: 15px;
+    padding: 8px 15px;
+    children: [prompt, entry];
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @text-col;
+    padding: 0 10px 0 0;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @text-col;
+    placeholder: "Search...";
+    placeholder-color: @text-col;
+}
+
+listview {
+    background-color: transparent;
+    columns: 1;
+    lines: 8;
+    spacing: 5px;
+    cycle: true;
+    dynamic: true;
+    layout: vertical;
+    border: 0px;
+    padding: 0px;
+}
+
+element {
+    background-color: transparent;
+    text-color: @text-col;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 2px 0;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+}
+
+element selected {
+    background-color: @selected-col;
+    text-color: @text-col-selected;
+    border-radius: 5px;
+}
+
+element urgent {
+    background-color: @bg-col;
+    text-color: @urgent-col;
+    border: 1px;
+    border-color: @urgent-col;
+}
+
+element-icon {
+    size: 20px;
+    margin: 0 10px 0 0;
+    background-color: transparent;
+}
+
+message {
+    background-color: @bg-col;
+    border: 1px;
+    border-color: @border-col;
+    border-radius: 75px;
+    padding: 10px;
+}
+
+textbox {
+    background-color: transparent;
+    text-color: @text-col;
+}

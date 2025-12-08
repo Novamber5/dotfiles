@@ -1,0 +1,39 @@
+# Sort by time, newest on top
+sort=-time
+
+# Appearance
+font=monospace 10
+background-color=#0a0a0aee
+text-color=#7a7a7a
+border-color=#1a1a1a
+border-size=1
+border-radius=0
+padding=15
+margin=10
+
+# Dimensions
+width=350
+height=150
+
+# Position (top right like your bar)
+anchor=top-right
+default-timeout=5000
+
+# Urgency levels
+[urgency=low]
+background-color=#0a0a0aee
+text-color=#5a5a5a
+border-color=#1a1a1a
+
+[urgency=normal]
+background-color=#0a0a0aee
+text-color=#7a7a7a
+border-color=#2a2a2a
+
+[urgency=critical]
+background-color=#1a0a0aee
+text-color=#9a7a7a
+border-color=#3a1a1a
+default-timeout=0
+
+
