@@ -38,18 +38,20 @@ inputbar {
 }
 
 prompt {
-    text-color: @fg2;
+    text-color: #FFFFFF;
 }
 
 entry {
     placeholder:        "Search";
-    placeholder-color:  @fg3;
+    placeholder-color:  #000000;
+    text-color: #ffffff;
 }
 
 message {
     margin:             12px 0 0;
     border-radius:      16px;
     border-color:       @bg2;
+    text-color: #FFFFFF;
     background-color:   @bg2;
 }
 
@@ -91,5 +93,5 @@ element-icon {
 }
 
 element-text {
-    text-color: inherit;
+    text-color: #FFFFFF;
 }

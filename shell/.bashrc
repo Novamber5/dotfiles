@@ -6,8 +6,7 @@
 [[ $- != *i* ]] && return
 
 # Run neofetch with centered image
-neofetch --kitty /home/nova/Pictures/Pintrest/wire.jpg --size 200px --gap 10 --xoffset 5 --yoffset 2  
-
+fastfetch
 # Aliases
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
