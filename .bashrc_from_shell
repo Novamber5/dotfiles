@@ -1,0 +1,42 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+# Run neofetch with centered image
+fastfetch
+# Aliases
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias dotfiles='/usr/bin/git --git-dir=/home/nova/.dotfiles/ --work-tree=/home/nova'
+
+# Environment variables
+export XCURSOR_THEME=breeze_cursors
+export XCURSOR_SIZE=24
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export HYPRSHOT_DIR="/home/nova/Pictures/Screenshots"
+
+# Import colors from pywal
+source ~/.cache/wal/colors.sh
+
+# Function to convert hex to RGB for prompt
+hex_to_rgb() {
+  local hex=${1#\#}
+  printf "%d;%d;%d" "0x${hex:0:2}" "0x${hex:2:2}" "0x${hex:4:2}"
+}
+
+# Color definitions using pywal colors
+RESET='\[\e[0m\]'
+BOLD='\[\e[1m\]'
+WHITE='\[\e[38;5;255m\]'
+
+# Convert pywal colors to RGB for true color support
+C1=$(hex_to_rgb "$color1")
+C4=$(hex_to_rgb "$color4")
+C5=$(hex_to_rgb "$color5")
+C6=$(hex_to_rgb "$color6")
+eval "$(starship init bash)"
+# Rounded powerline PS1 with Arch logo
+PS1='\[\e[48;5;67m\e[38;5;231m\]  \[\e[48;5;39m\e[38;5;67m\]\[\e[48;5;39m\e[38;5;231m\] \w \[\e[0m\e[38;5;39m\]\[\e[0m\] '
