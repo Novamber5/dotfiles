@@ -36,7 +36,6 @@ sudo apt install -y \
     mako-notifier \
     wofi \
     neofetch \
-    python3-pywal \
     stow \
     git \
     curl \
@@ -49,12 +48,9 @@ sudo apt install -y \
 echo ""
 echo -e "${GREEN}Packages installed successfully!${NC}"
 
-# Setup pywal
 echo ""
-echo -e "${YELLOW}Setting up pywal...${NC}"
 mkdir -p ~/.cache/wal
 
-# Generate default pywal colors if no wallpaper exists
 if [ ! -d ~/Pictures/Pintrest ]; then
     mkdir -p ~/Pictures/Pintrest
     echo -e "${YELLOW}Note: Place your wallpaper at ~/Pictures/Pintrest/wire.jpg for neofetch${NC}"
@@ -62,9 +58,7 @@ fi
 
 # Generate colors from default wallpaper or use a solid color
 if [ -f ~/Pictures/Pintrest/wire.jpg ]; then
-    wal -i ~/Pictures/Pintrest/wire.jpg
 elif [ -f /usr/share/backgrounds/kali-16x9/default ]; then
-    wal -i /usr/share/backgrounds/kali-16x9/default
 else
     # Create a simple fallback color scheme
     echo -e "${YELLOW}No wallpaper found, creating default color scheme...${NC}"
