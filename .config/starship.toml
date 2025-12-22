@@ -1,0 +1,23 @@
+
+add_newline = false
+
+# Main prompt with angled separator
+format = """
+[  ](bg:#82AAFF fg:white bold)\
+[](fg:#82AAFF bg:#3B4261)\
+$directory
+"""
+
+right_format = ""
+
+# Directory pill — slightly bigger + bold
+[directory]
+format = "[   $path   ](bg:#3B4261 fg:white bold)[](fg:#3B4261) "
+style = "cyan"
+truncation_length = 3
+truncation_symbol = "…"
+
+# No prompt arrow
+[character]
+success_symbol = ""
+error_symbol = ""

@@ -36,6 +36,18 @@ if [ ! -f /etc/arch-release ] && [ ! -f /etc/manjaro-release ]; then
     exit 1
 fi
 
+# Install yay if not installed
+if ! command -v yay &> /dev/null; then
+    print_info "Installing yay (AUR helper)..."
+    sudo pacman -S --needed --noconfirm git base-devel
+    cd /tmp
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si --noconfirm
+    cd ~
+    print_success "yay installed"
+fi
+
 # Install packages
 print_info "Installing packages with pacman..."
 echo ""
@@ -48,6 +60,9 @@ sudo pacman -Syu --needed --noconfirm \
     kitty \
     mako \
     fastfetch \
+    neovim \
+    starship \
+    swww \
     wl-clipboard \
     grim \
     slurp \
@@ -70,9 +85,23 @@ sudo pacman -Syu --needed --noconfirm \
     pipewire-alsa \
     wireplumber \
     thunar \
-    firefox
+    firefox \
+    kdeconnect \
+    btop \
+    yazi \
+    cowsay \
+    cmatrix
 
-print_success "Packages installed successfully"
+print_success "Pacman packages installed"
+echo ""
+
+# Install AUR packages
+print_info "Installing AUR packages with yay..."
+yay -S --needed --noconfirm \
+    zen-browser-bin \
+    pipes.sh
+
+print_success "AUR packages installed"
 echo ""
 
 # Backup existing configs
@@ -80,10 +109,10 @@ print_info "Backing up existing configurations..."
 BACKUP_DIR="$HOME/.config_backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
-configs=("hypr" "waybar" "rofi" "kitty" "mako" "fastfetch")
+configs=("hypr" "waybar" "rofi" "kitty" "mako" "fastfetch" "nvim" "gtk-3.0" "gtk-4.0" "fontconfig" "swww")
 for config in "${configs[@]}"; do
-    if [ -d "$HOME/.config/$config" ]; then
-        cp -r "$HOME/.config/$config" "$BACKUP_DIR/"
+    if [ -d "$HOME/.config/$config" ] || [ -f "$HOME/.config/$config" ]; then
+        cp -r "$HOME/.config/$config" "$BACKUP_DIR/" 2>/dev/null || true
         print_info "Backed up $config"
     fi
 done
@@ -144,6 +173,14 @@ sudo systemctl enable bluetooth
 print_success "Services enabled"
 echo ""
 
+# Setup starship
+if command -v starship &> /dev/null; then
+    if ! grep -q "starship init bash" "$HOME/.bashrc"; then
+        echo 'eval "$(starship init bash)"' >> "$HOME/.bashrc"
+        print_success "Added starship to .bashrc"
+    fi
+fi
+
 echo "========================================"
 print_success "Installation completed!"
 echo "========================================"
@@ -153,7 +190,17 @@ echo "  1. Log out and log back in"
 echo "  2. Select Hyprland from your login manager"
 echo "  3. Run: source ~/.bashrc"
 echo ""
-print_warning "Press Super+Q to close windows"
-print_warning "Press Super+Return to open terminal"
-print_warning "Press Super+D to open rofi"
+print_info "Keybindings:"
+print_warning "  Super+Q        - Close window"
+print_warning "  Super+Return   - Open terminal"
+print_warning "  Super+D        - Open rofi"
+echo ""
+print_info "Installed apps:"
+echo "  • Zen Browser  - Privacy-focused browser"
+echo "  • Yazi         - Modern file manager (run: yazi)"
+echo "  • Btop         - System monitor (run: btop)"
+echo "  • Cowsay       - Fun terminal tool (run: cowsay hello)"
+echo "  • Cmatrix      - Matrix effect (run: cmatrix)"
+echo "  • Pipes.sh     - Animated pipes (run: pipes.sh)"
+echo "  • KDE Connect  - Phone integration"
 echo ""

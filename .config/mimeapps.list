@@ -1,0 +1,14 @@
+[Added Associations]
+application/x-shellscript=kate-4.desktop;kate.desktop;
+text/plain=kate-6.desktop;kate-5.desktop;kate-3.desktop;kate-2.desktop;
+
+[Default Applications]
+application/x-shellscript=kate-4.desktop;
+text/plain=kitty-nvim.desktop
+x-scheme-handler/discord=vesktop.desktop
+application/pdf=zathura.desktop
+image/png=zathura.desktop
+image/jpeg=zathura.desktop
+image/webp=zathura.desktop
+image/svg+xml=zathura.desktop
+inode/directory=yazi.desktop

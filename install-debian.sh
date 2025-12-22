@@ -41,11 +41,26 @@ print_info "Updating package list..."
 sudo apt update
 echo ""
 
+# Install nala (prettier apt)
+if ! command -v nala &> /dev/null; then
+    print_info "Installing nala (better apt frontend)..."
+    sudo apt install -y nala
+    print_success "nala installed"
+fi
+
+# Install flatpak
+if ! command -v flatpak &> /dev/null; then
+    print_info "Installing flatpak..."
+    sudo apt install -y flatpak
+    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    print_success "flatpak installed"
+fi
+
 # Install basic packages
 print_info "Installing packages with apt..."
 echo ""
 
-sudo apt install -y \
+sudo nala install -y \
     wget \
     curl \
     git \
@@ -53,6 +68,7 @@ sudo apt install -y \
     kitty \
     rofi \
     mako-notifier \
+    neovim \
     wl-clipboard \
     grim \
     slurp \
@@ -67,22 +83,57 @@ sudo apt install -y \
     brightnessctl \
     policykit-1-gnome \
     thunar \
-    firefox-esr
+    firefox-esr \
+    kdeconnect \
+    btop \
+    cowsay \
+    cmatrix \
+    fonts-font-awesome \
+    fonts-noto-color-emoji
 
 print_success "Basic packages installed"
 echo ""
 
+# Install starship
+if ! command -v starship &> /dev/null; then
+    print_info "Installing starship prompt..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+    print_success "Starship installed"
+fi
+
+# Install yazi
+if ! command -v yazi &> /dev/null; then
+    print_info "Installing yazi..."
+    YAZI_VERSION=$(curl -s https://api.github.com/repos/sxyazi/yazi/releases/latest | grep tag_name | cut -d '"' -f 4)
+    wget "https://github.com/sxyazi/yazi/releases/download/${YAZI_VERSION}/yazi-x86_64-unknown-linux-gnu.zip" -O /tmp/yazi.zip
+    unzip /tmp/yazi.zip -d /tmp/
+    sudo mv /tmp/yazi-x86_64-unknown-linux-gnu/yazi /usr/local/bin/
+    rm -rf /tmp/yazi*
+    print_success "Yazi installed"
+fi
+
 # Install fastfetch
-print_info "Installing fastfetch..."
 if ! command -v fastfetch &> /dev/null; then
+    print_info "Installing fastfetch..."
     FASTFETCH_VERSION=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep tag_name | cut -d '"' -f 4)
     wget "https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-amd64.deb" -O /tmp/fastfetch.deb
     sudo dpkg -i /tmp/fastfetch.deb
     rm /tmp/fastfetch.deb
     print_success "Fastfetch installed"
-else
-    print_info "Fastfetch already installed"
 fi
+
+# Install pipes.sh
+if ! command -v pipes.sh &> /dev/null; then
+    print_info "Installing pipes.sh..."
+    sudo wget -O /usr/local/bin/pipes.sh https://raw.githubusercontent.com/pipeseroni/pipes.sh/master/pipes.sh
+    sudo chmod +x /usr/local/bin/pipes.sh
+    print_success "Pipes.sh installed"
+fi
+
+# Install Zen Browser via flatpak
+print_info "Installing Zen Browser via flatpak..."
+flatpak install -y flathub io.github.zen_browser.zen
+
 echo ""
 
 # Hyprland installation
@@ -92,7 +143,7 @@ read -p "Do you want to build and install Hyprland? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_info "Installing Hyprland dependencies..."
-    sudo apt install -y \
+    sudo nala install -y \
         meson \
         cmake \
         ninja-build \
@@ -140,7 +191,7 @@ read -p "Do you want to build and install Waybar? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_info "Installing Waybar dependencies..."
-    sudo apt install -y \
+    sudo nala install -y \
         libgtkmm-3.0-dev \
         libsigc++-2.0-dev \
         libjsoncpp-dev \
@@ -168,15 +219,24 @@ else
 fi
 echo ""
 
+# Install swww
+print_info "Installing swww (wallpaper daemon)..."
+SWWW_VERSION=$(curl -s https://api.github.com/repos/LGFae/swww/releases/latest | grep tag_name | cut -d '"' -f 4)
+wget "https://github.com/LGFae/swww/releases/download/${SWWW_VERSION}/swww-x86_64-unknown-linux-musl" -O /tmp/swww
+sudo mv /tmp/swww /usr/local/bin/swww
+sudo chmod +x /usr/local/bin/swww
+print_success "swww installed"
+echo ""
+
 # Backup existing configs
 print_info "Backing up existing configurations..."
 BACKUP_DIR="$HOME/.config_backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
-configs=("hypr" "waybar" "rofi" "kitty" "mako" "fastfetch")
+configs=("hypr" "waybar" "rofi" "kitty" "mako" "fastfetch" "nvim" "gtk-3.0" "gtk-4.0" "fontconfig" "swww")
 for config in "${configs[@]}"; do
-    if [ -d "$HOME/.config/$config" ]; then
-        cp -r "$HOME/.config/$config" "$BACKUP_DIR/"
+    if [ -d "$HOME/.config/$config" ] || [ -f "$HOME/.config/$config" ]; then
+        cp -r "$HOME/.config/$config" "$BACKUP_DIR/" 2>/dev/null || true
         print_info "Backed up $config"
     fi
 done
@@ -237,6 +297,14 @@ sudo systemctl enable bluetooth
 print_success "Services enabled"
 echo ""
 
+# Setup starship
+if command -v starship &> /dev/null; then
+    if ! grep -q "starship init bash" "$HOME/.bashrc"; then
+        echo 'eval "$(starship init bash)"' >> "$HOME/.bashrc"
+        print_success "Added starship to .bashrc"
+    fi
+fi
+
 echo "========================================"
 print_success "Installation completed!"
 echo "========================================"
@@ -246,7 +314,17 @@ echo "  1. Log out and log back in"
 echo "  2. Select Hyprland from your login manager"
 echo "  3. Run: source ~/.bashrc"
 echo ""
-print_warning "Press Super+Q to close windows"
-print_warning "Press Super+Return to open terminal"
-print_warning "Press Super+D to open rofi"
+print_info "Keybindings:"
+print_warning "  Super+Q        - Close window"
+print_warning "  Super+Return   - Open terminal"
+print_warning "  Super+D        - Open rofi"
+echo ""
+print_info "Installed apps:"
+echo "  • Zen Browser  - Privacy-focused browser (run: flatpak run io.github.zen_browser.zen)"
+echo "  • Yazi         - Modern file manager (run: yazi)"
+echo "  • Btop         - System monitor (run: btop)"
+echo "  • Cowsay       - Fun terminal tool (run: cowsay hello)"
+echo "  • Cmatrix      - Matrix effect (run: cmatrix)"
+echo "  • Pipes.sh     - Animated pipes (run: pipes.sh)"
+echo "  • KDE Connect  - Phone integration"
 echo ""
